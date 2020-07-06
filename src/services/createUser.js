@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const ConnectionDB = require('../connection/ConnectionDB');
-const connection = new ConnectionDB();
+const ConnectionUserDB = require('../connection/ConnectionUserDB');
+const connection = new ConnectionUserDB();
 
 app.use(bodyParser.json());
 
