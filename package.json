@@ -2,10 +2,10 @@
   "name": "searching_roomie_back",
   "version": "1.0.0",
   "description": "Sercives for buscando roomie",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "node src/services/createUser.js",
-    "dev": "nodemon src/services/UserServices.js"
+    "start-dev": "DEBUG=searching_roomie_back nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,8 @@
     "mongodb": "^3.5.9"
   },
   "devDependencies": {
+    "chalk": "^4.1.0",
+    "debug": "^4.1.1",
     "nodemon": "^2.0.4"
   }
 }

@@ -4,6 +4,7 @@ class ConnectionUserDB {
     // console.log('Ingreso a loginUser')
     const client = new MongoClient(this.URL);
     console.log(client)
+    console.log(email)
 
     try {
       // console.log(email)

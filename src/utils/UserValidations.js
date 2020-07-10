@@ -17,7 +17,7 @@ class Validations {
     if(this.validateEmail(request.email)) {
       const connection = new ConnectionUserDB();
       const user = await connection.loginUser(request.email);
-      console.log(user);
+      debug(`Ingreso a la validación de validateUser con ${request}`)
 
       if(user) {
         const match = await this.validatePassword(request.password, user.password);
