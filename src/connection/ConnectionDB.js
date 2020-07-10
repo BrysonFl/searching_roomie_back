@@ -1,22 +1,15 @@
 const MongoClient = require('mongodb').MongoClient;
+const ReadProperties = require('../utils/ReadProperties');
 
 class ConnectionDB {
-  
-  URL = "mongodb+srv://administrador:2yBFyozglk27U5Lo@cluster0.aeklz.mongodb.net/searching_roomie?retryWrites=true&w=majority";
 
-  createUserRoomie(res) {
-    MongoClient.connect(this.URL, (err, client) => {
-      if (err) return err;
-      client.db('searching_roomie').collection('users').insert(res);
-    });
+  async getInstanceCollection(collection) {
+    const properties = new ReadProperties();
+    const client = new MongoClient(properties.getPropertiesDB().url);
+    await client.connect();
+    return client.db(properties.getPropertiesDB().db).collection(collection);
   }
 
-  createUserHost(res) {
-    MongoClient.connect(this.URL, (err, client) => {
-      if (err) return err;
-      client.db('searching_roomie').collection('users_host').insert(res);
-    });
-  }
 }
 
 module.exports = ConnectionDB;
