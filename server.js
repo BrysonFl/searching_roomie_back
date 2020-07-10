@@ -3,7 +3,7 @@ const express = require('express');
 const chalk = require('chalk');
 
 const api = require('./src/router/api');
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 const app = express();
 const server = http.createServer(app);
 

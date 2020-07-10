@@ -1,5 +1,5 @@
-const ReadProperties = require('../utils/ReadProperties');
 const ConnectionDB = require('./ConnectionDB');
+const ReadProperties = require('../utils/ReadProperties');
 
 class ConnectionRoomsDB {
 

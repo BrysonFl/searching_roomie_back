@@ -1,4 +1,4 @@
-const ConnectionUserDB = require('../connection/ConnectionUserDB');
+const ConnectionUserDB = require('../connection_db/ConnectionUserDB');
 const bcrypt = require('bcrypt');
 
 class Validations {
