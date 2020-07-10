@@ -1,16 +1,21 @@
-const debug = require('debug')('searching_roomie_back');
 const express = require('express');
 const UserValidation = require('../utils/UserValidations');
 const ConnectionRoomsDB = require('../connection/ConnectionRoomsDB');
 
 const api = express.Router();
 
-api.get('/', async (req, res) => {
+api.get('/', (req, res) => {
   const db = new ConnectionRoomsDB();
-  debug(`Ingreso a la petición con el request ${req.body}}`);
-  const data = await db.getRooms();
-  debug(`Trajó la data: ${data.address}`)
-  res.json({response: data});
+  
+  db.getRooms().then(response => {
+    res.status(200).json({
+      response
+    })
+  }).catch(err => {
+    res.status(500).json({
+      err
+    })
+  })
 });
 
 api.get('/login', (req, res) => {

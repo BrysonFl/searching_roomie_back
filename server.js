@@ -7,6 +7,7 @@ const port = process.env.PORT || 3000;
 const app = express();
 const server = http.createServer(app);
 
+api.use(express.json());
 app.use('/', api);
 
 server.listen(port, () => {

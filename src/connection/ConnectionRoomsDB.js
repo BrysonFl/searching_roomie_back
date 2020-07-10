@@ -1,6 +1,5 @@
-const ConnectionDB = require('./ConnectionDB');
 const ReadProperties = require('../utils/ReadProperties');
-const debug = require('debug')('ConnectionRoomsDB');
+const ConnectionDB = require('./ConnectionDB');
 
 class ConnectionRoomsDB {
 
@@ -10,11 +9,8 @@ class ConnectionRoomsDB {
   }
 
   async getRooms() {
-    debug('Ingreso a obtener las habitaciones');
     try {
-      const coll = await this.client.getInstanceCollection(this.properties.getPropertiesDB().collection_rooms);
-      const data = await coll.find();
-      return data;
+      return await (await this.client.getInstanceCollection(this.properties.getPropertiesDB().collection_rooms)).find().toArray();
     } catch(err) {
       return err;
     }
