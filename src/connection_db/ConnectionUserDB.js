@@ -1,4 +1,13 @@
+const ConnectionDB = require('./ConnectionDB');
+const ReadProperties = require('../utils/ReadProperties');
+const { ObjectId } = require('mongodb');
+
 class ConnectionUserDB {
+
+  constructor() {
+    this.properties = new ReadProperties();
+    this.client = new ConnectionDB();
+  }
 
   async loginUser(email) {
     // console.log('Ingreso a loginUser')
@@ -19,6 +28,14 @@ class ConnectionUserDB {
       return err;
     } finally {
       client.close();
+    }
+  }
+
+  async getUserId(id) {
+    try {
+      return await (await this.client.getInstanceCollection(this.properties.getPropertiesDB().collection_users)).findOne({_id: ObjectId(id)});
+    } catch(err) {
+      return err;
     }
   }
 
