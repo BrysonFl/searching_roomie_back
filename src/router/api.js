@@ -1,11 +1,15 @@
 const express = require('express');
 const cors = require('cors');
+const bodyParser = require('body-parser');
+
 const UserValidation = require('../utils/UserValidations');
 const ConnectionRoomsDB = require('../connection_db/ConnectionRoomsDB');
+const ConnectionUserDB = require('../connection_db/ConnectionUserDB');
 const ConnectionS3 = require('../connection_s3/ConnectionS3');
 
 const api = express.Router();
 api.use(cors());
+api.use(bodyParser.json());
 
 api.get('/', (req, res) => {
   const db = new ConnectionRoomsDB();
@@ -17,21 +21,29 @@ api.get('/', (req, res) => {
 
 api.get('/description/:id', (req, res) => {
   const db = new ConnectionRoomsDB();
-  console.log(`Ingreso con el id: ${req.params.id}`)
+  // console.log(`Ingreso con el id: ${req.params.id}`)
 
   db.getRoomId(req.params.id)
     .then(response => res.status(200).json(response))
     .catch(err => res.status(500).json(err));
 });
 
-api.get('/login', (req, res) => {
+api.post('/login', (req, res) => {
   const validation = new UserValidation();
-
-  debug(`Ingreso a la ruta /login con ${req.body}`)
+  console.log(`Ingreso con ${req.body.email}`);
 
   validation.validateUser(req.body)
     .then(response => res.send({response: response}))
     .catch(err => res.send(err));
+});
+
+api.post('/create-user', (req, res) => {
+  const userDB = new ConnectionUserDB();
+  console.log(req.body)
+
+  userDB.createUser(req.body)
+    .then(response => res.status(200).json(response))
+    .catch(err => res.status(500).json(err));
 });
 
 api.get('/d', (req, res) => {

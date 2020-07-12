@@ -17,12 +17,11 @@ class Validations {
     if(this.validateEmail(request.email)) {
       const connection = new ConnectionUserDB();
       const user = await connection.loginUser(request.email);
-      debug(`Ingreso a la validación de validateUser con ${request}`)
 
       if(user) {
         const match = await this.validatePassword(request.password, user.password);
         if(match) {
-          return user;
+          return `Logueo exitoso`;
         } else {
           return `La contraseña no coincide`;
         }
