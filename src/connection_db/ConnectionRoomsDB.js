@@ -25,7 +25,6 @@ class ConnectionRoomsDB {
     try {
       const room = await (await this.client.getInstanceCollection(this.properties.getPropertiesDB().collection_rooms)).findOne({_id: ObjectId(id)});
       const {name, lastName, pleasures, photo} = await this.connectionUser.getUserId(room.idUser);
-      // const photoBytes = await this.s3.getPhotoUser(photo);
       return {room: room, user: {name, lastName, pleasures, photo}};
     } catch(err) {
       return err;
