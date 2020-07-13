@@ -21,7 +21,6 @@ api.get('/', (req, res) => {
 
 api.get('/description/:id', (req, res) => {
   const db = new ConnectionRoomsDB();
-  // console.log(`Ingreso con el id: ${req.params.id}`)
 
   db.getRoomId(req.params.id)
     .then(response => res.status(200).json(response))
@@ -51,6 +50,6 @@ api.get('/d', (req, res) => {
   s3.getPhotoUser('users/30.-DLX-800x533.jpg')
     .then(bytes => res.status(200).json(bytes))
     .catch(err => res.send(err));
-})
+});
 
 module.exports = api;
