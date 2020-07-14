@@ -1,5 +1,6 @@
 const ConnectionDB = require('./ConnectionDB');
 const ReadProperties = require('../utils/ReadProperties');
+const bcrypt = require('bcrypt');
 const { ObjectId } = require('mongodb');
 
 class ConnectionUserDB {
@@ -23,17 +24,21 @@ class ConnectionUserDB {
 
   async getUserId(id) {
     try {
-      return await (await this.client.getInstanceCollection(this.properties.getPropertiesDB().collection_users)).findOne({_id: ObjectId(id)});
+      const responseDB = await (await this.client.getInstanceCollection(this.properties.getPropertiesDB().collection_users)).findOne({_id: ObjectId(id)});
+      return responseDB;
     } catch(err) {
       return err;
     }
   }
 
   async createUser(request) {
-    request.password = await bcrypt.hash(request.password, 12);
-
     try {
-      return await (await this.client.getInstanceCollection(this.properties.getPropertiesDB().collection_users)).insert(request);
+      console.log('Inicio de asd')
+      request.password = await bcrypt.hash(request.password, 12);
+      console.log('Ingreso a esto')
+      const responseDB = await (await this.client.getInstanceCollection(this.properties.getPropertiesDB().collection_users)).insert(request);
+      console.log(responseDB);
+      return responseDB;
     } catch(err) {
       return err;
     }

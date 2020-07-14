@@ -10,7 +10,7 @@ const ConnectionS3 = require('../connection_s3/ConnectionS3');
 
 const api = express.Router();
 api.use(cors());
-api.use(bodyParser.json());
+api.use(bodyParser.json({limit: "50mb"}));
 
 api.get('/', (req, res) => {
   const db = new ConnectionRoomsDB();
@@ -46,7 +46,7 @@ api.post('/login', async (req, res) => {
 
 api.post('/create-user', (req, res) => {
   const userDB = new ConnectionUserDB();
-  console.log(req.body)
+  // console.log(req.body);
 
   userDB.createUser(req.body)
     .then(response => res.status(200).json(response))
