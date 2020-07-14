@@ -21,7 +21,7 @@ class Validations {
       if(user) {
         const match = await this.validatePassword(request.password, user.password);
         if(match) {
-          return `Logueo exitoso`;
+          return true;
         } else {
           return `La contraseña no coincide`;
         }

@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
 
 const UserValidation = require('../utils/UserValidations');
 const ConnectionRoomsDB = require('../connection_db/ConnectionRoomsDB');
@@ -27,13 +28,20 @@ api.get('/description/:id', (req, res) => {
     .catch(err => res.status(500).json(err));
 });
 
-api.post('/login', (req, res) => {
+api.post('/login', async (req, res) => {
   const validation = new UserValidation();
-  console.log(`Ingreso con ${req.body.email}`);
 
-  validation.validateUser(req.body)
-    .then(response => res.send({response: response}))
-    .catch(err => res.send(err));
+  const token = jwt.sign({user: req.body.email}, 'Secret Password', {
+    expiresIn: 60 * 60 * 24
+  });
+
+  const validate = await validation.validateUser(req.body);
+
+  if(validate === true) {
+    res.status(200).send({status: 200, token: token});
+  } else {
+    res.status(200).send({status: 401, response: validate})
+  }
 });
 
 api.post('/create-user', (req, res) => {
