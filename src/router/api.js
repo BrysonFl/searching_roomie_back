@@ -44,9 +44,30 @@ api.post('/login', async (req, res) => {
   }
 });
 
+api.post('/rooms-host', async (req, res) => {
+  const connectionUser = new ConnectionUserDB();
+  const connectionRooms = new ConnectionRoomsDB();
+
+  if(req.headers.authorization && req.body.email) {
+    const tokenVerify = jwt.verify(req.headers.authorization, 'Secret Password');
+
+    if(tokenVerify) {
+      const user = await connectionUser.getIdUserEmail(req.body.email);
+
+      if(user.role === 'Host') {
+        const roomsHost = await connectionRooms.getAllRoomsHost(user._id);
+        res.status(200).send({status: 200, rooms: roomsHost, role: user.role});
+      } else {
+        res.status(404).send({status: 404, message: `El usuario con el correo ${req.body.email} no es host`})
+      }
+    } else {
+      res.status(401).send({message: 'No autorizado'});
+    }
+  }
+});
+
 api.post('/create-user', (req, res) => {
   const userDB = new ConnectionUserDB();
-  // console.log(req.body);
 
   userDB.createUser(req.body)
     .then(response => res.status(200).json(response))

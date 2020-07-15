@@ -30,6 +30,16 @@ class ConnectionRoomsDB {
       return err;
     }
   }
+
+  async getAllRoomsHost(id) {
+    try {
+      const roomsHost = await (await this.client.getInstanceCollection(this.properties.getPropertiesDB().collection_rooms)).find({idUser: id}).toArray();
+      console.log(roomsHost);
+      return roomsHost;
+    } catch(err) {
+      return err;
+    }
+  }
 }
 
 module.exports = ConnectionRoomsDB;

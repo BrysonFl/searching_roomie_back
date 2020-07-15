@@ -31,6 +31,15 @@ class ConnectionUserDB {
     }
   }
 
+  async getIdUserEmail(email) {
+    try {
+      const {_id, role} = await (await this.client.getInstanceCollection(this.properties.getPropertiesDB().collection_users)).findOne({email: email});
+      return {_id, role};
+    } catch(err) {
+      return err;
+    }
+  }
+
   async createUser(request) {
     try {
       console.log('Inicio de asd')
