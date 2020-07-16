@@ -54,11 +54,11 @@ api.post('/create-room', async (req, res) => {
     if(tokenVerify) {
       const user = await connectionUser.getIdUserByEmail(req.body.email);
       req.body.idUser = user._id;
-      await connectionRooms.createRoom(req.body);
-      res.status(400).send({status: 400, message: 'La habitación se ha creado satisfactoriamente'});
+      const response = await connectionRooms.createRoom(req.body);
+      res.status(400).send({status: 400, message: 'La habitación se ha creado satisfactoriamente', responseDB: response});
     }
   } catch(err) {
-    res.status(200).send({message: err})
+    res.status(200).send({status: 200, message: err});
   }
 });
 

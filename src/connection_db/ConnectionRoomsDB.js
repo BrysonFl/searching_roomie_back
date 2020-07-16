@@ -24,7 +24,7 @@ class ConnectionRoomsDB {
 
   async getRoomsHome() {
     try {
-      return await (await this.client.getInstanceCollection(this.properties.getPropertiesDB().collection_rooms)).find().sort({amount: -1}).toArray();
+      return await (await this.client.getInstanceCollection(this.properties.getPropertiesDB().collection_rooms)).find().sort({price: -1}).toArray();
     } catch(err) {
       return err;
     }
