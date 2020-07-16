@@ -2,6 +2,7 @@ const ConnectionDB = require('./ConnectionDB');
 const ConnectionUserDB = require('./ConnectionUserDB');
 const ConnectionS3 = require('../connection_s3/ConnectionS3');
 const ReadProperties = require('../utils/ReadProperties');
+const { response } = require('express');
 const ObjectId = require('mongodb').ObjectID;
 
 class ConnectionRoomsDB {
@@ -33,9 +34,12 @@ class ConnectionRoomsDB {
 
   async getAllRoomsHost(id) {
     try {
-      const roomsHost = await (await this.client.getInstanceCollection(this.properties.getPropertiesDB().collection_rooms)).find({idUser: id}).toArray();
-      console.log(roomsHost);
-      return roomsHost;
+      this.client.getInstanceCollection(this.properties.getPropertiesDB().collection_rooms).then(response => {
+        console.log(id);
+        return response.find({idUser: id})
+      }).then(response => response.toArray()).then(response => console.log(response));
+      // console.log(roomsHost);
+      // return roomsHost;
     } catch(err) {
       return err;
     }

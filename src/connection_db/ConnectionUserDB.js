@@ -31,7 +31,7 @@ class ConnectionUserDB {
     }
   }
 
-  async getIdUserEmail(email) {
+  async getIdUserByEmail(email) {
     try {
       const {_id, role} = await (await this.client.getInstanceCollection(this.properties.getPropertiesDB().collection_users)).findOne({email: email});
       return {_id, role};
@@ -42,11 +42,8 @@ class ConnectionUserDB {
 
   async createUser(request) {
     try {
-      console.log('Inicio de asd')
       request.password = await bcrypt.hash(request.password, 12);
-      console.log('Ingreso a esto')
-      const responseDB = await (await this.client.getInstanceCollection(this.properties.getPropertiesDB().collection_users)).insert(request);
-      console.log(responseDB);
+      const responseDB = await (await this.client.getInstanceCollection(this.properties.getPropertiesDB().collection_users)).insertOne(request);
       return responseDB;
     } catch(err) {
       return err;

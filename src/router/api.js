@@ -38,7 +38,7 @@ api.post('/login', async (req, res) => {
   const validate = await validation.validateUser(req.body);
 
   if(validate === true) {
-    res.status(200).send({status: 200, token: token});
+    res.status(200).send({status: 200, token: token, email: req.body.email});
   } else {
     res.status(200).send({status: 401, response: validate})
   }
@@ -47,12 +47,14 @@ api.post('/login', async (req, res) => {
 api.post('/rooms-host', async (req, res) => {
   const connectionUser = new ConnectionUserDB();
   const connectionRooms = new ConnectionRoomsDB();
+  // console.log(req.headers.authorization)
+  console.log(req.body.email.email);
 
   if(req.headers.authorization && req.body.email) {
     const tokenVerify = jwt.verify(req.headers.authorization, 'Secret Password');
 
     if(tokenVerify) {
-      const user = await connectionUser.getIdUserEmail(req.body.email);
+      const user = await connectionUser.getIdUserByEmail(req.body.email);
 
       if(user.role === 'Host') {
         const roomsHost = await connectionRooms.getAllRoomsHost(user._id);
