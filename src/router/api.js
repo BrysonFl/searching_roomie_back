@@ -44,11 +44,29 @@ api.post('/login', async (req, res) => {
   }
 });
 
+api.post('/create-room', async (req, res) => {
+  const connectionRooms = new ConnectionRoomsDB();
+  const connectionUser = new ConnectionUserDB();
+
+  try {
+    const tokenVerify = jwt.verify(req.headers.authorization, 'Secret Password');
+
+    if(tokenVerify) {
+      const user = await connectionUser.getIdUserByEmail(req.body.email);
+      req.body.idUser = user._id;
+      await connectionRooms.createRoom(req.body);
+      res.status(400).send({status: 400, message: 'La habitación se ha creado satisfactoriamente'});
+    }
+  } catch(err) {
+    res.status(200).send({message: err})
+  }
+});
+
 api.post('/rooms-host', async (req, res) => {
   const connectionUser = new ConnectionUserDB();
   const connectionRooms = new ConnectionRoomsDB();
   // console.log(req.headers.authorization)
-  console.log(req.body.email.email);
+  /* console.log(req.body.email.email); */
 
   if(req.headers.authorization && req.body.email) {
     const tokenVerify = jwt.verify(req.headers.authorization, 'Secret Password');

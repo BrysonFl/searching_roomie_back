@@ -14,6 +14,14 @@ class ConnectionRoomsDB {
     this.s3 = new ConnectionS3();
   }
 
+  async createRoom(request) {
+    try {
+      return await (await this.client.getInstanceCollection(this.properties.getPropertiesDB().collection_rooms)).insertOne(request);
+    } catch(err) {
+      return err;
+    }
+  }
+
   async getRoomsHome() {
     try {
       return await (await this.client.getInstanceCollection(this.properties.getPropertiesDB().collection_rooms)).find().sort({amount: -1}).toArray();
@@ -38,8 +46,6 @@ class ConnectionRoomsDB {
         console.log(id);
         return response.find({idUser: id})
       }).then(response => response.toArray()).then(response => console.log(response));
-      // console.log(roomsHost);
-      // return roomsHost;
     } catch(err) {
       return err;
     }
