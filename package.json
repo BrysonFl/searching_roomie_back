@@ -4,7 +4,7 @@
   "description": "Sercives for buscando roomie",
   "main": "server.js",
   "scripts": {
-    "start": "node src/services/createUser.js",
+    "start": "node src/services/api.js",
     "dev": "nodemon server.js"
   },
   "repository": {
