@@ -61,7 +61,6 @@ class ConnectionUserDB {
     } else {
       try {
         request.password = await bcrypt.hash(request.password, 12);
-        request.photo = await this.s3.createPhotoUser(request.photo);
         const responseDB = await (await this.client.getInstanceCollection(this.properties.getPropertiesDB().collection_users)).insertOne(request);
         return responseDB;
       } catch(err) {

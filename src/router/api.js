@@ -92,13 +92,4 @@ api.post('/create-user', (req, res) => {
     .catch(err => res.status(500).json(err));
 });
 
-api.get('/d', (req, res) => {
-  const s3 = new ConnectionS3();
-  // s3.createPhotos().then(response => res.send(response)).catch(err => res.send(err));
-  s3.createPhotoUser()
-    .then(
-      response => res.status(200).json(response))
-    .catch(err => res.send(err));
-});
-
 module.exports = api;

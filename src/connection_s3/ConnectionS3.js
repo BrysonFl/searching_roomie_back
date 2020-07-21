@@ -1,5 +1,5 @@
 const AWS = require('aws-sdk');
-const fs = require('fs');
+const FileReader = require('filereader');
 
 class ConnectionS3 {
 
@@ -10,19 +10,29 @@ class ConnectionS3 {
       region: 'us-east-2'
     });
     this.bucket = 'searchingroomie';
+    this.reader = new FileReader();
   }
 
   async createPhotoUser(bytesArray) {
-    const params = {
-      Bucket: 'searchingroomie',
-      Body: bytesArray,
-      Key: 'folder/img.jpg',
-      ContentType: 'application/jpeg'
-    };
+    console.log(bytesArray);
 
-    const response = await this.connection.upload(params);
-    console.log((await response.promise()).Location);
-    return (await response.promise()).Location;
+    try {
+      const result = this.reader.
+      console.log(result);
+      
+      const params = {
+        Bucket: 'searchingroomie',
+        Body: '',
+        Key: 'folder/img.jpg',
+        ContentType: 'application/jpeg'
+      };
+
+      const response = await this.connection.upload(params);
+      console.log((await response.promise()).Location);
+      return (await response.promise()).Location;
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   async getPhotoUser(urlFile) {
