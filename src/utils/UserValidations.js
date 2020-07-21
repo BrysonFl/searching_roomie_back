@@ -20,12 +20,8 @@ class Validations {
 
       if(user) {
         const match = await this.validatePassword(request.password, user.password);
-        if(match) {
-          return true;
+          return {user: user, pass: match};
         } else {
-          return `La contraseña no coincide`;
-        }
-      } else {
         return `El usuario con el correo ${request.email} no existe`
       }
     } else {

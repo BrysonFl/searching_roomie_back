@@ -37,10 +37,10 @@ api.post('/login', async (req, res) => {
 
   const validate = await validation.validateUser(req.body);
 
-  if(validate === true) {
-    res.status(200).send({status: 200, token: token, email: req.body.email});
+  if(validate.pass === true) {
+    res.status(200).send({status: 200, token: token, email: req.body.email, role: validate.user.role});
   } else {
-    res.status(200).send({status: 401, response: validate})
+    res.status(200).send({status: 401, response: validate});
   }
 });
 
@@ -65,8 +65,6 @@ api.post('/create-room', async (req, res) => {
 api.post('/rooms-host', async (req, res) => {
   const connectionUser = new ConnectionUserDB();
   const connectionRooms = new ConnectionRoomsDB();
-  // console.log(req.headers.authorization)
-  /* console.log(req.body.email.email); */
 
   if(req.headers.authorization && req.body.email) {
     const tokenVerify = jwt.verify(req.headers.authorization, 'Secret Password');
@@ -90,14 +88,16 @@ api.post('/create-user', (req, res) => {
   const userDB = new ConnectionUserDB();
 
   userDB.createUser(req.body)
-    .then(response => res.status(200).json(response))
+    .then(response => res.status(200).json({status: 200, message: response}))
     .catch(err => res.status(500).json(err));
 });
 
 api.get('/d', (req, res) => {
   const s3 = new ConnectionS3();
-  s3.getPhotoUser('users/30.-DLX-800x533.jpg')
-    .then(bytes => res.status(200).json(bytes))
+  // s3.createPhotos().then(response => res.send(response)).catch(err => res.send(err));
+  s3.createPhotoUser()
+    .then(
+      response => res.status(200).json(response))
     .catch(err => res.send(err));
 });
 

@@ -12,30 +12,17 @@ class ConnectionS3 {
     this.bucket = 'searchingroomie';
   }
 
-  async createFolderPhotos(idRoom) {
-    // const params = {
-    //   Bucket: this.bucket,
-    // }
+  async createPhotoUser(bytesArray) {
+    const params = {
+      Bucket: 'searchingroomie',
+      Body: bytesArray,
+      Key: 'folder/img.jpg',
+      ContentType: 'application/jpeg'
+    };
 
-    fs.readFile("./prueba.txt", (err, data) => {
-      if(err) throw err;
-
-      const params = {
-        Bucket: this.bucket,
-        Key: 'informacion.txt',
-        Body: data
-      }
-
-      this.connection.putObject(params, (err, data) => {
-        if(err) throw err;
-        console.log(data);
-      })
-    })
-
-    // this.connection.listObjectsV2(params, (err, data) => {
-    //   if(err) throw err;
-    //   console.log(data)
-    // });
+    const response = await this.connection.upload(params);
+    console.log((await response.promise()).Location);
+    return (await response.promise()).Location;
   }
 
   async getPhotoUser(urlFile) {
@@ -44,7 +31,7 @@ class ConnectionS3 {
       Key: `${urlFile}`
     }
 
-    return (await this.connection.getObject(params).promise()).Body;
+    return (await this.connection.getObject(params).promise()).ContentLength;
   }
 
   async getPhotosRoom(idRoom) {
@@ -56,7 +43,7 @@ class ConnectionS3 {
     this.connection.getObject(params, (err, data) => {
       if(err) throw err;
       console.log(data);
-      return data.Body;
+      return data.location;
     })
   }
 
