@@ -39,28 +39,22 @@ api.post('/login', async (req, res) => {
   if(validate.pass === true) {
     res.status(200).send({status: 200, token: token, email: req.body.email, role: validate.user.role});
   } else {
-    res.status(200).send({status: 401, response: validate});
+    res.status(401).send({status: 401, response: validate});
   }
 });
 
 api.post('/create-room', async (req, res) => {
   const connectionRooms = new ConnectionRoomsDB();
-  const connectionUser = new ConnectionUserDB();
-
-  console.log(req.headers.authorization);
-  console.log(req.body);
 
   try {
     const tokenVerify = jwt.verify(req.headers.authorization, 'Secret Password');
 
     if(tokenVerify) {
-      const user = await connectionUser.getIdUserByEmail(req.body.email);
-      req.body.idUser = user._id;
       const response = await connectionRooms.createRoom(req.body);
-      res.status(400).send({status: 400, message: 'La habitación se ha creado satisfactoriamente', responseDB: response});
+      res.status(200).send({status: 200, message: 'La habitación se ha creado satisfactoriamente', responseDB: response});
     }
   } catch(err) {
-    res.status(200).send({status: 200, message: err});
+    res.status(400).send({status: 400, message: err});
   }
 });
 
