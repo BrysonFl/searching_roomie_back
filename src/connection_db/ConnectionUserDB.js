@@ -33,39 +33,42 @@ class ConnectionUserDB {
     }
   }
 
-  async getIdUserByEmail(email) {
-    try {
-      const {_id, role} = await (await this.client.getInstanceCollection(this.properties.getPropertiesDB().collection_users)).findOne({email: email});
-      return {_id, role};
-    } catch(err) {
-      return err;
-    }
-  }
-
   async getEmail(email) {
     try {
       const emailExist = await (await this.client.getInstanceCollection(this.properties.getPropertiesDB().collection_users)).findOne({email: email});
+
       if(emailExist) {
         return true;
       }
     } catch(err) {
       return err;
     }
+
+    return false;
   }
 
   async createUser(request) {
-    const emailExist = this.getEmail(request.email);
+    const emailExist = await this.getEmail(request.email);
 
     if(emailExist) {
       return 'El email ingresado ya existe en nuestra base de datos';
     } else {
       try {
         request.password = await bcrypt.hash(request.password, 12);
-        const responseDB = await (await this.client.getInstanceCollection(this.properties.getPropertiesDB().collection_users)).insertOne(request);
-        return responseDB;
+        await (await this.client.getInstanceCollection(this.properties.getPropertiesDB().collection_users)).insertOne(request);
+        return 'Se guardo exitosamente';
       } catch(err) {
         return err;
       }
+    }
+  }
+
+  async getPhotoUserByEmail(email) {
+    try {
+      const {photo} = await (await this.client.getInstanceCollection(this.properties.getPropertiesDB().collection_users)).findOne({email: email});
+      return photo;
+    } catch (err) {
+      return err;
     }
   }
 }

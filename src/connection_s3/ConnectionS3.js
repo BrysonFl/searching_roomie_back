@@ -19,7 +19,7 @@ class ConnectionS3 {
     try {
       const result = this.reader.
       console.log(result);
-      
+
       const params = {
         Bucket: 'searchingroomie',
         Body: '',

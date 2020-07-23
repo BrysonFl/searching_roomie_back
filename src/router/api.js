@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken');
 const UserValidation = require('../utils/UserValidations');
 const ConnectionRoomsDB = require('../connection_db/ConnectionRoomsDB');
 const ConnectionUserDB = require('../connection_db/ConnectionUserDB');
-const ConnectionS3 = require('../connection_s3/ConnectionS3');
 
 const api = express.Router();
 api.use(cors());
@@ -48,6 +47,9 @@ api.post('/create-room', async (req, res) => {
   const connectionRooms = new ConnectionRoomsDB();
   const connectionUser = new ConnectionUserDB();
 
+  console.log(req.headers.authorization);
+  console.log(req.body);
+
   try {
     const tokenVerify = jwt.verify(req.headers.authorization, 'Secret Password');
 
@@ -63,21 +65,14 @@ api.post('/create-room', async (req, res) => {
 });
 
 api.post('/rooms-host', async (req, res) => {
-  const connectionUser = new ConnectionUserDB();
   const connectionRooms = new ConnectionRoomsDB();
 
   if(req.headers.authorization && req.body.email) {
     const tokenVerify = jwt.verify(req.headers.authorization, 'Secret Password');
 
     if(tokenVerify) {
-      const user = await connectionUser.getIdUserByEmail(req.body.email);
-
-      if(user.role === 'Host') {
-        const roomsHost = await connectionRooms.getAllRoomsHost(user._id);
-        res.status(200).send({status: 200, rooms: roomsHost, role: user.role});
-      } else {
-        res.status(404).send({status: 404, message: `El usuario con el correo ${req.body.email} no es host`})
-      }
+      const roomsHost = await connectionRooms.getAllRoomsHost(req.body.email);
+      res.status(200).send({status: 200, dataUserRooms: roomsHost});
     } else {
       res.status(401).send({message: 'No autorizado'});
     }
