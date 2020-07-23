@@ -1,6 +1,5 @@
 const ConnectionDB = require('./ConnectionDB');
 const ConnectionUserDB = require('./ConnectionUserDB');
-const ConnectionS3 = require('../connection_s3/ConnectionS3');
 const ReadProperties = require('../utils/ReadProperties');
 const ObjectId = require('mongodb').ObjectID;
 
@@ -10,7 +9,6 @@ class ConnectionRoomsDB {
     this.properties = new ReadProperties();
     this.client = new ConnectionDB();
     this.connectionUser = new ConnectionUserDB();
-    this.s3 = new ConnectionS3();
   }
 
   async createRoom(request) {
@@ -46,6 +44,15 @@ class ConnectionRoomsDB {
       return {userPhoto, rooms};
     } catch(err) {
       return err;
+    }
+  }
+
+  async getFilterRooms(price, country) {
+    try {
+      const roomsFilter = await (await this.client.getInstanceCollection(this.properties.getPropertiesDB().collection_rooms)).find({price: price, country: country}).toArray();
+      return roomsFilter;
+    } catch (err) {
+      console.log(err);
     }
   }
 }

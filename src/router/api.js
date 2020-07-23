@@ -87,4 +87,16 @@ api.post('/create-user', (req, res) => {
     .catch(err => res.status(500).json(err));
 });
 
+api.post('/search', (req, res) => {
+  const roomsDB = new ConnectionRoomsDB();
+
+  console.log(req.body)
+
+  roomsDB.getFilterRooms(req.body.price, req.body.country)
+    .then(response => {
+      res.status(200).send(response)
+    })
+    .catch(err => console.log(err));
+});
+
 module.exports = api;
